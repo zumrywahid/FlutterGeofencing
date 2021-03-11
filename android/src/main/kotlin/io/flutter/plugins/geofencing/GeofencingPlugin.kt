@@ -117,8 +117,9 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
         }
       }
 
-      // Start foreground service
-      startForegroundService(context)
+      // Start foreground service 
+      //using another package for foreground service...
+      //startForegroundService(context)
 
     }
 
@@ -211,7 +212,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
 
 
       // Stop foreground service
-      stopForegroundService(context)
+      //stopForegroundService(context)
     }
 
     @JvmStatic
