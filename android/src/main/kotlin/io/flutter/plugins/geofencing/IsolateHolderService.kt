@@ -58,7 +58,7 @@ class IsolateHolderService : Service() {
                 acquire()
             }
         }
-        startForeground(1, notification)
+        startForeground(999, notification)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int) : Int {
