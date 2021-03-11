@@ -46,8 +46,8 @@ class IsolateHolderService : Service() {
 
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Almost home!")
-                .setContentText("Within 1KM of home. Fine location tracking enabled.")
+                .setContentTitle("Alarma Geografica!")
+                .setContentText("Monitoring your location.")
                 .setSmallIcon(imageId)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build()
