@@ -116,7 +116,34 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
           result?.error(it.toString(), null, null)
         }
       }
+
+      // Start foreground service
+      startForegroundService(context)
+
     }
+
+
+    @JvmStatic
+    private fun sendIntentToForegroundService(context: Context, intent: Intent) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        context.startForegroundService(intent)
+      } else {
+        context.startService(intent)
+      }
+    }
+
+    @JvmStatic
+    private fun startForegroundService(context: Context) {
+      sendIntentToForegroundService(context, Intent(context, IsolateHolderService::class.java))
+    }
+
+    @JvmStatic
+    private fun stopForegroundService(context: Context) {
+      val intent = Intent(context, IsolateHolderService::class.java)
+      intent.setAction(IsolateHolderService.ACTION_SHUTDOWN)
+      sendIntentToForegroundService(context, intent)
+    }
+
 
     @JvmStatic
     private fun addGeofenceToCache(context: Context, id: String, args: ArrayList<*>) {
@@ -152,7 +179,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
     @JvmStatic
     private fun getGeofencingRequest(geofence: Geofence, initialTrigger: Int): GeofencingRequest {
       return GeofencingRequest.Builder().apply {
-        setInitialTrigger(initialTrigger)
+        setInitialTrigger(0)
         addGeofence(geofence)
       }.build()
     }
@@ -181,6 +208,10 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
           result.error(it.toString(), null, null)
         }
       }
+
+
+      // Stop foreground service
+      stopForegroundService(context)
     }
 
     @JvmStatic
