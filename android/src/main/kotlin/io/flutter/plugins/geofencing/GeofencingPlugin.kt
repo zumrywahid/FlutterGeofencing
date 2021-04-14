@@ -25,6 +25,9 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import org.json.JSONArray
+import android.media.AudioManager
+
+
 
 class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
   private var mContext : Context? = null
@@ -116,35 +119,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
           result?.error(it.toString(), null, null)
         }
       }
-
-      // Start foreground service 
-      //using another package for foreground service...
-      //startForegroundService(context)
-
     }
-
-
-    @JvmStatic
-    private fun sendIntentToForegroundService(context: Context, intent: Intent) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        context.startForegroundService(intent)
-      } else {
-        context.startService(intent)
-      }
-    }
-
-    @JvmStatic
-    private fun startForegroundService(context: Context) {
-      sendIntentToForegroundService(context, Intent(context, IsolateHolderService::class.java))
-    }
-
-    @JvmStatic
-    private fun stopForegroundService(context: Context) {
-      val intent = Intent(context, IsolateHolderService::class.java)
-      intent.setAction(IsolateHolderService.ACTION_SHUTDOWN)
-      sendIntentToForegroundService(context, intent)
-    }
-
 
     @JvmStatic
     private fun addGeofenceToCache(context: Context, id: String, args: ArrayList<*>) {
@@ -180,7 +155,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
     @JvmStatic
     private fun getGeofencingRequest(geofence: Geofence, initialTrigger: Int): GeofencingRequest {
       return GeofencingRequest.Builder().apply {
-        setInitialTrigger(0)
+        setInitialTrigger(initialTrigger)
         addGeofence(geofence)
       }.build()
     }
@@ -209,10 +184,6 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
           result.error(it.toString(), null, null)
         }
       }
-
-
-      // Stop foreground service
-      //stopForegroundService(context)
     }
 
     @JvmStatic
@@ -252,7 +223,18 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
         result.success(list)
       }
     }
-    
+
+
+    @JvmStatic
+    private fun setDeviceAlarmLevel(context: Context, result: Result) {
+      try {
+        val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), AudioManager.FLAG_SHOW_UI);
+      } catch (e: Exception) {
+        e.printStackTrace();
+      }
+    }
+
 
     @JvmStatic
     private fun removeGeofenceFromCache(context: Context, id: String) {
@@ -328,6 +310,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
               result)
       "GeofencingPlugin.getRegisteredGeofenceIds" -> getRegisteredGeofenceIds(mContext!!, result)
       "GeofencingPlugin.getRegisteredGeofenceRegions" -> getRegisteredGeofences(mContext!!, result)
+      "GeofencingPlugin.setSoundLevel" -> setDeviceAlarmLevel(mContext!!, result)
       else -> result.notImplemented()
     }
   }
