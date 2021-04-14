@@ -161,4 +161,8 @@ class GeofencingManager {
   /// geofence region.
   static Future<bool> removeGeofenceById(String id) async => await _channel
       .invokeMethod('GeofencingPlugin.removeGeofence', <dynamic>[id]);
+  
+  /// Adjust the sound level of the device for alarm.
+  static Future<bool> setSoundLevel(String id) async => await _channel
+      .invokeMethod('GeofencingPlugin.setSoundLevel', <dynamic>[id]);
 }
