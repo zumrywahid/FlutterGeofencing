@@ -92,7 +92,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
               .setRequestId(id)
               .setCircularRegion(lat, long, radius)
               .setTransitionTypes(fenceTriggers)
-              .setLoiteringDelay(loiteringDelay)
+              .setLoiteringDelay(30 * 1000)
               .setNotificationResponsiveness(notificationResponsiveness)
               .setExpirationDuration(expirationDuration)
               .build()
