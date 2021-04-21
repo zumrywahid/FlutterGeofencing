@@ -181,7 +181,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
     @JvmStatic
     private fun getGeofencingRequest(geofence: Geofence, initialTrigger: Int): GeofencingRequest {
       return GeofencingRequest.Builder().apply {
-        setInitialTrigger(0)
+        setInitialTrigger(initialTrigger)
         addGeofence(geofence)
       }.build()
     }
