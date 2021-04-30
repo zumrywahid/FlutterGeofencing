@@ -220,7 +220,7 @@ class GeofencingPlugin : ActivityAware, FlutterPlugin, MethodCallHandler {
     private fun setDeviceAlarmLevel(context: Context, result: Result) {
       try {
         val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), AudioManager.FLAG_SHOW_UI);
+        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
       } catch (e: Exception) {
         e.printStackTrace();
       }
